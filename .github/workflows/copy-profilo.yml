@@ -17,16 +17,13 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Copy profilo repository contents
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git clone --depth 1 https://github.com/commmercial/profilo.git ../profilo-source
+          rm -rf ../profilo-source/.git
           find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
           cp -a ../profilo-source/. .
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          if ! git diff --cached --quiet; then
-            git commit -m "Copy profilo repository contents"
-            git push origin HEAD:main
-          fi
+          git commit -m "Copy profilo repository contents"
+          git push origin HEAD:main
