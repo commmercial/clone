@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - .github/workflows/copy-profilo.yml
 
 permissions:
   contents: write
@@ -20,8 +22,12 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/commmercial/profilo.git ../profilo-source
           rm -rf ../profilo-source/.git
+          cp .github/workflows/copy-profilo.yml /tmp/copy-profilo.yml
           find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
           cp -a ../profilo-source/. .
+          rm -rf .github
+          mkdir -p .github/workflows
+          cp /tmp/copy-profilo.yml .github/workflows/copy-profilo.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
